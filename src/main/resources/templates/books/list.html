@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: common-head('Book List')"></head>
+<body class="bg-light">
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container mt-4">
+  <h2 class="mb-4">📚 Book List</h2>
+
+  <!-- 🔍 Search Form -->
+  <form class="row mb-3" method="get" th:action="@{/books}">
+    <div class="col-md-10">
+      <input type="text" name="search" class="form-control" placeholder="Search..." th:value="${search}" />
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100" type="submit">Search</button>
+    </div>
+  </form>
+
+  <!-- 📕 Book Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
+      <thead class="table-dark">
+      <tr>
+        <th scope="col">Cover</th>
+        <th scope="col">Title</th>
+        <th scope="col">Author</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Borrow</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book : ${booksPage.content}">
+        <td>
+          <img th:if="${book.coverImagePath}" th:src="@{${book.coverImagePath}}" width="60" class="img-thumbnail" alt="Cover" />
+          <span th:if="${book.coverImagePath == null}" class="text-muted">No Cover</span>
+        </td>
+        <td th:text="${book.title}">Title</td>
+        <td th:text="${book.author}">Author</td>
+        <td th:text="${book.quantity}">0</td>
+        <td>
+          <form th:action="@{/borrow/{id}(id=${book.id})}" method="post">
+            <button type="submit" class="btn btn-success btn-sm" th:if="${book.quantity > 0}">Borrow</button>
+            <span class="text-muted" th:if="${book.quantity == 0}">Unavailable</span>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 📄 Pagination -->
+  <nav>
+    <ul class="pagination justify-content-center">
+      <li class="page-item" th:classappend="${!booksPage.hasPrevious()} ? 'disabled'">
+        <a class="page-link" th:href="@{/books(page=${booksPage.number - 1}, size=${booksPage.size}, search=${search})}">Previous</a>
+      </li>
+
+      <li class="page-item" th:each="i : ${#numbers.sequence(0, booksPage.totalPages - 1)}"
+          th:classappend="${i == booksPage.number} ? 'active'">
+        <a class="page-link"
+           th:href="@{/books(page=${i}, size=${booksPage.size}, search=${search})}"
+           th:text="${i + 1}">1</a>
+      </li>
+
+      <li class="page-item" th:classappend="${!booksPage.hasNext()} ? 'disabled'">
+        <a class="page-link" th:href="@{/books(page=${booksPage.number + 1}, size=${booksPage.size}, search=${search})}">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+</body>
+</html>

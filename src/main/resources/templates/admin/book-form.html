@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: common-head('Book Form')"></head>
+<body class="bg-light">
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container mt-5">
+  <div class="card shadow-sm p-4" style="max-width: 600px; margin: 0 auto;">
+    <h2 class="mb-4 text-center" th:text="${book.id == null ? '➕ Add New Book' : '✏️ Edit Book'}">Book Form</h2>
+
+    <form th:action="@{/admin/books}" th:object="${book}" method="post">
+      <!-- Book ID (Hidden for update) -->
+      <input type="hidden" th:if="${book.id}" th:field="*{id}" />
+
+      <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input type="text" th:field="*{title}" class="form-control" placeholder="Book Title" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Author</label>
+        <input type="text" th:field="*{author}" class="form-control" placeholder="Author Name" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">ISBN</label>
+        <input type="text" th:field="*{isbn}" class="form-control" placeholder="ISBN (optional)" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Quantity</label>
+        <input type="number" min="0" th:field="*{quantity}" class="form-control" placeholder="Number of copies" required />
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">
+          <span th:text="${book.id == null ? 'Add Book' : 'Update Book'}">Save</span>
+        </button>
+      </div>
+
+      <div class="mt-3 text-center">
+        <a th:href="@{/admin}" class="btn btn-outline-secondary btn-sm">← Back to Dashboard</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

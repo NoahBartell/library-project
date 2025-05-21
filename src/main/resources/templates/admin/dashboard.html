@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: common-head('Admin Dashboard')"></head>
+<body class="bg-light">
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+  <h2 class="mb-4">Admin Dashboard</h2>
+
+  <a class="btn btn-primary mb-3" th:href="@{/admin/books/new}">➕ Add New Book</a>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+    <tr><th>Cover</th><th>Title</th><th>Author</th><th>ISBN</th><th>Qty</th><th>Delete</th><th>Upload Cover</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${books}">
+        <td>
+            <img th:if="${book.coverImagePath}" th:src="@{${book.coverImagePath}}" width="60" alt="Cover Image" />
+            <span th:if="${book.coverImagePath == null}">No Cover</span>
+        </td>
+      <td th:text="${book.title}">Title</td>
+      <td th:text="${book.author}">Author</td>
+      <td th:text="${book.isbn}">ISBN</td>
+      <td th:text="${book.quantity}">Qty</td>
+      <td>
+        <a class="btn btn-sm btn-danger" th:href="@{/admin/books/delete/{id}(id=${book.id})}">🗑️</a>
+      </td>
+      <td>
+        <form th:action="@{/books/{id}/upload(id=${book.id})}" method="post" enctype="multipart/form-data">
+          <input class="form-control form-control-sm mb-1" type="file" name="file" required />
+          <button class="btn btn-sm btn-secondary" type="submit">Upload</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

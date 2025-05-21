@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: common-head('My Borrowed Books')"></head>
+<body class="bg-light">
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h2 class="mb-4">📚 My Borrowed Books</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Borrowed At</th>
+            <th>Return</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="borrow : ${borrows}">
+            <td th:text="${borrow.book.title}">Title</td>
+            <td th:text="${borrow.book.author}">Author</td>
+            <td th:text="${#temporals.format(borrow.borrowDate, 'yyyy-MM-dd')}">Date</td>
+            <td>
+                <form th:action="@{/borrow/return/{id}(id=${borrow.getId()})}" method="post">
+                    <button class="btn btn-sm btn-danger">Return</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/books}" class="btn btn-outline-secondary">← Back to Books</a>
+</div>
+</body>
+</html>
