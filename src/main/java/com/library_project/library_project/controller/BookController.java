@@ -1,12 +1,15 @@
 package com.library_project.library_project.controller;
 
 import com.library_project.library_project.entity.Book;
+import com.library_project.library_project.repository.BookRepository;
 import com.library_project.library_project.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,9 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private BookRepository bookRepository;
 
 
     @GetMapping
@@ -58,13 +64,29 @@ public class BookController {
 
     @PostMapping("/{id}/upload")
     public String uploadCover(@PathVariable Long id,
-                              @RequestParam("file") MultipartFile file) {
-        try {
-            bookService.uploadCover(id, file);
-        } catch (IOException e) {
-            e.printStackTrace(); // Log error
-        }
-        return "redirect:/books";
+                              @RequestParam("file") MultipartFile file) throws IOException {
+        Book book = bookRepository.findById(id).orElseThrow();
+        book.setCoverImage(file.getBytes());
+        book.setCoverImageType(file.getContentType());
+        bookRepository.save(book);
+
+        return "redirect:/admin"; // or wherever you want to go after upload
     }
+
+
+    @GetMapping("/{id}/cover")
+    @ResponseBody
+    public ResponseEntity<byte[]> serveCoverImage(@PathVariable Long id) {
+        Book book = bookRepository.findById(id).orElse(null);
+
+        if (book == null || book.getCoverImage() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, book.getCoverImageType())
+                .body(book.getCoverImage());
+    }
+
 
 }

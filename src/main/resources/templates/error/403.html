@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: common-head('Access Denied')"></head>
+<body class="bg-light">
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="text-center">
+        <h1 class="display-1 text-danger">403</h1>
+        <p class="lead">🚫 You don’t have permission to access this page.</p>
+        <a th:href="@{/}" class="btn btn-outline-primary">Go Home</a>
+    </div>
+</div>
+</body>
+</html>

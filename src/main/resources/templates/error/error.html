@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: common-head('Something Went Wrong')"></head>
+<body class="bg-light">
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="text-center">
+        <h1 class="display-1 text-warning">⚠️</h1>
+        <p class="lead">Oops! Something went wrong.</p>
+        <a th:href="@{/books}" class="btn btn-outline-primary">Go Home</a>
+    </div>
+</div>
+</body>
+</html>

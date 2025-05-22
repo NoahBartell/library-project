@@ -22,8 +22,12 @@ public class Book {
 
     private String isbn;
 
-    @Column(name = "cover_image_path")
-    private String coverImagePath;
+    @Lob
+    @Column(name = "cover_image")
+    private byte[] coverImage;
+
+    @Column(name = "cover_image_type")
+    private String coverImageType;
 
     private int quantity;
 }

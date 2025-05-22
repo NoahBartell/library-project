@@ -16,8 +16,8 @@
     <tbody>
     <tr th:each="book : ${books}">
         <td>
-            <img th:if="${book.coverImagePath}" th:src="@{${book.coverImagePath}}" width="60" alt="Cover Image" />
-            <span th:if="${book.coverImagePath == null}">No Cover</span>
+          <img th:if="${book.coverImage}" th:src="@{/books/{id}/cover(id=${book.id})}" width="100" alt="Cover"/>
+          <span th:if="${book.coverImage == null}" class="text-muted">No Cover</span>
         </td>
       <td th:text="${book.title}">Title</td>
       <td th:text="${book.author}">Author</td>

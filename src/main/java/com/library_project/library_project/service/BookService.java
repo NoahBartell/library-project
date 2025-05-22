@@ -45,21 +45,21 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
-    public void uploadCover(Long bookId, MultipartFile file) throws IOException {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
-
-        if (!file.isEmpty()) {
-            String filename = UUID.randomUUID() + "-" + file.getOriginalFilename();
-            Path uploadPath = Paths.get("src/main/resources/static/uploads/");
-            Files.createDirectories(uploadPath);
-            Path filePath = uploadPath.resolve(filename);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-            book.setCoverImagePath("/uploads/" + filename); // relative URL for the browser
-            bookRepository.save(book);
-        }
-    }
+//    public void uploadCover(Long bookId, MultipartFile file) throws IOException {
+//        Book book = bookRepository.findById(bookId)
+//                .orElseThrow(() -> new RuntimeException("Book not found"));
+//
+//        if (!file.isEmpty()) {
+//            String filename = UUID.randomUUID() + "-" + file.getOriginalFilename();
+//            Path uploadPath = Paths.get("src/main/uploads/");
+//            Files.createDirectories(uploadPath);
+//            Path filePath = uploadPath.resolve(filename);
+//            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+//
+//            book.setCoverImagePath("/uploads/" + filename); // relative URL for the browser
+//            bookRepository.save(book);
+//        }
+//    }
 
 }
 
